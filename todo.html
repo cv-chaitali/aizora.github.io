@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bhblog-ai</title>
+    <link rel="stylesheet" href="/Users/violetevergarden/Desktop/CELL/mine/blog_station/style.css">
+    <script>
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.content > div');
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(sectionId).style.display = 'block';
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>    
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <header>
+        <h1>bhblog-ai</h1>
+        <p>Some papers and some concepts</p>
+    </header>
+    <nav>
+        <a href="#" onclick="showSection('home')">Home</a>
+        <a href="#" onclick="showSection('blog')">Blog</a>
+        <a href="#" onclick="showSection('paper-summary')">Paper Summaries</a>
+    </nav>
+
+    <div class="content">
+        <div id="home">
+            <h2>Home</h2>
+            <p>Hello, I share paper summaries and sometimes some concepts in a form of blog.</p>
+            <p>About me</p>
+            <ul>
+                <li>Name : Chaitali</li>
+                <li>Occupation : PhD student</li>
+                <li>Hobby : Cooking</li>
+            </ul>
+        </div>
+
+        <div id="blog" class="blog-section">
+            <h2>Blog</h2>
+            <ul>
+                <li><a href="#" onclick="showSection('ml-guide')">Shapley Value</a></li>
+            </ul>
+        </div>
+
+        <div id="ml-guide" class="blog-post">
+            <h2>Shapley Value</h2>
+            <p><strong>Note:</strong> If you think I should correct something, let me know 😊.</p>
+            <p>This blog includes:</p>
+            <ol>
+                <li><a href="#what-is-shapley-value">What is Shapley Value</a></li>
+                <li><a href="#why-shapley-value">Why do we use Shapley Value</a></li>
+                <li><a href="#shapley-by-hand">Shapley Value by Hand</a></li>
+                <li><a href="#shapley-by-code">Shapley Value by Code</a></li>
+            </ol>
+        
+            <h3 id="what-is-shapley-value">What is Shapley Value</h3>
+            <p>Shapley value is a part of solution concept in game theory. In short its work is to check the contribution of each team player
+                in a game. 
+            </p>
+        
+            <h3 id="why-shapley-value">Where/Why Do We Use Shapley Value</h3>
+            <p>Shapley value is now a part of XAI (Explainable AI) too. It is an way to see which feature has more contribution than the other.
+               Let's assume a game played by 3 teams (A,B and C). Each team has 3 players. In the game B won and the prize money must be 
+               divided into the 3 team members (i,j and k). But for a fair distribution of the money, this Shapley value tries to check 
+               how much each team player has contributed to the game. Now if we assume, the game is a machine learning model, team players are 
+               features and outcome is the prediction (winning is the correct prediction), we can actually see the logic here. 
+            </p>
+        
+            <h3 id="shapley-by-hand">Shapley Value by Hand</h3>
+            <p>In this section, I will be doing some MATH stuff. Let's look at the equation:</p>
+            <p>
+                \[
+                \phi_i = \sum_{S \subseteq N \setminus \{i\}} \frac{|S|! (|N| - |S| - 1)!}{|N|!} \left[ v(S \cup \{i\}) - v(S) \right]
+                \] 
+            </p>
+            <p>Here, <strong>N</strong> is the total number of features; <strong>S</strong> is a subset created from N features; 
+                <strong>v</strong> is a function/model; <strong>i</strong> is ONE of the N features.</p>
+            <p>To give an intuition, through this equation we try to know the contribution of ,<strong>i</strong> feature by calculating 
+                the contribution of other features excluding that <strong>i</strong>.</p>
+                <p>
+                    Assume the function <strong>v(S)</strong> gives the following values for subsets, we need to calculate Shapley value 
+                    for A, B and C:
+                </p>
+            
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Subset (S)</th>
+                            <th>v(S)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>{}</td><td>0</td></tr>
+                        <tr><td>{A}</td><td>10</td></tr>
+                        <tr><td>{B}</td><td>15</td></tr>
+                        <tr><td>{C}</td><td>5</td></tr>
+                        <tr><td>{A, B}</td><td>25</td></tr>
+                        <tr><td>{A, C}</td><td>18</td></tr>
+                        <tr><td>{B, C}</td><td>20</td></tr>
+                        <tr><td>{A, B, C}</td><td>30</td></tr>
+                    </tbody>
+                </table>
+            
+                <strong>Calculate Shapley Value for Feature A:</strong>
+                <ol>
+                    <li>Start with the formula for Shapley value which we can get from the main formula above: 
+                        \[ \phi_A = \frac{1}{3!} [ (v({A}) - v({})) + 2(v({A, B}) - v({B})) + 2(v({A, C}) - v({C})) + (v({A, B, C}) - v({B, C})) ] \]
+                    (Here S = 1 and N = 3, \[[v(S \cup \{i\}) - v(S)]= [ (v({A}) - v({})) + 2(v({A, B}) - v({B})) + 2(v({A, C}) - v({C})) + (v({A, B, C}) - v({B, C})) ] \]
+                    means we need to calculate all other subsets which do not include 
+                    <strong>A</strong>
+                    which is <strong>i</strong> in this case. We considered <strong>S = {}, S={B,C}, S={B}, S={C}</strong>)
+                    </li>
+                    <li>Substitute the values of v(S):
+                        \[ \phi_A = \frac{1}{6} [ (10 - 0) + 2(25 - 15) + 2(18 - 5) + (30 - 20) ] \]
+                    </li>
+                    <li>Calculate each term step-by-step:
+                        <ul>
+                            <li>\( v({A}) - v({}) = 10 - 0 = 10 \)</li>
+                            <li>\( v({A, B}) - v({B}) = 25 - 15 = 10 \)</li>
+                            <li>\( 2 \times (v({A, B}) - v({B})) = 2 \times 10 = 20 \)</li>
+                            <li>\( v({A, C}) - v({C}) = 18 - 5 = 13 \)</li>
+                            <li>\( 2 \times (v({A, C}) - v({C})) = 2 \times 13 = 26 \)</li>
+                            <li>\( v({A, B, C}) - v({B, C}) = 30 - 20 = 10 \)</li>
+                        </ul>
+                    </li>
+                    <li>Add all these contributions together:
+                        \[ 10 + 20 + 26 + 10 = 66 \]
+                    </li>
+                    <li>Divide by the total number of permutations (3! = 6):
+                        \[ \phi_A = \frac{66}{6} = 11 \]
+                    </li>
+                </ol>
+            
+                <strong>Similarly, calculate for Features B and C:</strong>
+            
+                <p>Similary, if we calculate the values for B and C, we can get <strong>13 for B and 6 for C</strong>.</p>
+            
+            <h3 id="shapley-by-code">Shapley Value by Code</h3>
+
+
+            <p>
+                <strong>Let's have some imports and utilities first</strong>
+        <pre><code class="language-python">
+
+            import matplotlib.pyplot as plt
+            import cv2
+            import numpy as np
+            import itertools
+            from tqdm import tqdm
+            import torch
+            import torchvision.transforms as transforms
+            from torchvision.models import resnet18
+            from PIL import Image
+
+            def preprocess_image(image, size=(224, 224)):
+                transform = transforms.Compose([
+                    transforms.Resize(size),
+                    transforms.ToTensor(),
+                    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+                ])
+                return transform(image).unsqueeze(0)  
+            
+            def mask_image(image, mask, fill_value=0):
+                masked_image = image.clone()
+                for i in range(3):  
+                    masked_image[0, i][mask == 0] = fill_value
+                return masked_image
+                </code></pre>
+
+                     <strong>Code Shapley value from scratch</strong>
+        <pre><code class="language-python">
+            def shapley_values(image, model, feature_parts):
+                """
+                Compute Shapley values for the importance of feature regions in an image.
+
+                Parameters:
+                    image: I/P image with shape of (1, 3, Height, Width).
+                    model: Any model.
+                    feature_parts: Can create feature regions.It is custom. However, more feature parts/regions can 
+                    cause more computation time/cost.
+                """
+                n = len(feature_parts) #suppose we have 8 features 
+                shap_values = np.zeros(n)
+
+                # Creating S(subsets from the main equation) 
+                S = list(itertools.chain.from_iterable(
+                    itertools.combinations(range(n), r) for r in range(n + 1)
+                )) #we create 8+1 subsets including one empty
+
+                with torch.no_grad():  #we desable gradient as we do not need it 
+                    for subset in tqdm(S, desc="Calculating Shapley values"):
+                        subset_mask = sum(feature_parts[i] for i in subset) > 0
+                        masked_image = mask_image(image, subset_mask) # it is needed to identify regions
+                        output = model(masked_image).squeeze() #get the output model is v
+                        predicted_value = output.max().item() #highest predicted value of the model
+
+                        for i in range(n): 
+                            if i not in subset: # to make sure that i th feature region is not included inside S
+                                subset_with_i_mask = sum(feature_parts[j] for j in subset + (i,)) > 0
+                                masked_image_with_i = mask_image(image, subset_with_i_mask)
+                                output_with_i = model(masked_image_with_i).squeeze() 
+                                predicted_value_with_i = output_with_i.max().item()
+
+                                marginal_contribution = predicted_value_with_i - predicted_value
+                                shap_values[i] += marginal_contribution / len(S)
+
+                return shap_values
+        </code></pre>
+
+        <strong>Implement the shapley function. We will get</strong>
+        <p> In this case we are going to have 4 value as we have divided the the images into 4 parts.</p>
+                <pre><code class="language-python">
+            image_path = "African_Bush_Elephant.jpg"  #Input 
+            image = Image.open(image_path).convert("RGB") 
+            image_tensor = preprocess_image(image) 
+            
+            
+            #making feature regions
+            height, width = image_tensor.shape[2:]
+            region_masks = [
+                (np.zeros((height, width)), (0, height // 2, 0, width // 2)),  # Top-left
+                (np.zeros((height, width)), (0, height // 2, width // 2, width)),  # Top-right
+                (np.zeros((height, width)), (height // 2, height, 0, width // 2)),  # Bottom-left
+                (np.zeros((height, width)), (height // 2, height, width // 2, width))  # Bottom-right
+            ] 
+            
+            feature_regions = []
+            for mask, (x1, x2, y1, y2) in region_masks:
+                mask[x1:x2, y1:y2] = 1
+                feature_regions.append(torch.tensor(mask, dtype=torch.bool)) 
+            shap_values = shapley_values(image_tensor, model, feature_regions)
+            print("Shapley Values for each region:", shap_values)
+                    
+                </code></pre>
+                <strong>Try loading your favourite model and play with the region size.</strong>
+            </p>
+        </div>
+
+        <div id="paper-summary" class="paper-summary-section">
+            <h2>Paper Summaries</h2>
+            <ul>
+                <li><a href="#" onclick="showSection('paper-1')">Self-Distillation Bridges Distribution Gap in Language Model Fine-Tuning</a></li>
+            </ul>
+        </div>
+
+        <div id="paper-1" class="blog-post">
+            <h2>Self-Distillation Bridges Distribution Gap in Language Model Fine-Tuning</h2>
+            <p>Self-data-distillation method : Here, the model was used to create a distilled dataset to match its original distribution. </p>
+            <p><strong>How?</strong></p>
+            The following image summarises how it is done. 
+            <img src="/Users/violetevergarden/Desktop/CELL/mine/blog_station/ss/paper_1_method.png" alt="Method from paper" width="800" height="200">
+        </div>
+    </div>
+</body>
+</html>
