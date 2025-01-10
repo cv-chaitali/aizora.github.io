@@ -247,13 +247,73 @@
         <div id="paper-summary" class="paper-summary-section" style="display: none;">
             <h2>Paper Summaries</h2>
             <ul>
-                <li><a href="#paper-1" onclick="showSection('paper-1')">Self-Distillation Bridges Distribution Gap in Language Model Fine-Tuning</a></li>
+                <li><a href="#paper-1" onclick="showSection('paper-1')">P-1 : Self-Distillation Bridges Distribution Gap in Language Model Fine-Tuning</a></li>
             </ul>
         </div>
 
         <div id="paper-1" class="blog-post" style="display: none;">
+            
             <h2>Self-Distillation Bridges Distribution Gap in Language Model Fine-Tuning</h2>
-            <p>Self-data-distillation method: The model was used to create a distilled dataset to match its original distribution.</p>
+            <p>
+                <strong>Note : Images and Equations are from the original paper.</strong>
+                Paper reference : 
+                <pre><code class="language-python">
+@article{yang2024self,
+title={Self-distillation bridges distribution gap in language model fine-tuning},
+author={Yang, Zhaorui and Pang, Tianyu and Feng, Haozhe and Wang, Han and Chen, Wei and Zhu, Minfeng and Liu, Qian},
+journal={arXiv preprint arXiv:2402.13669},
+year={2024}
+}
+                </code></pre>
+            </p>
+            <p><strong>Abstract</strong> : In this paper they assumed that the cause of fined-tuned models not being able to balance the performance is the mismatch in the distributions 
+                between the LLM and task dataset. 
+            </p>
+            <p>This blog includes:</p>
+            <ol>
+                <li><a href="#how">How did they solve this?</a></li>
+                <li><a href="#results">Paper Results</a></li>
+
+                <h3 id="how">How did they solve this?</h3>
+                The following image shows how the distilled data is being created in the paper. 
+                <img src="figures/paper_1_method.png" alt="method" style="max-width: 100%; height: auto;">
+                <p>
+                    Now,let's look at the following expression. 
+                    \[
+                    \tilde{y} \sim f_{\theta}(y \mid c^{t}, x^{t}, y^{t}).
+                    \] 
+                </p>
+                <p>
+                    Considering \(f_{\theta}\) is a seed language model(LM) parameterized by \(\theta\) , \(c^{t},x^{t},y^{t}\) are context, instruction, and output.
+                    And using the seed model, they regenerated/rephrase the output into \(\tilde{y}\) given \(y^{t}\) to match the LM's distribution.
+                </p>
+                <p>
+                    The following Equation shows how the quality is maintained. Let's say for a certain instruction we get  \(\tilde{y}\). If this  
+                    \(\tilde{y}\) is similar to \(y^{t}\), \(\tilde{y}\) is kept otherwise \(y^{t}\) is used. This is done to prevent the distilled data
+                    to be filled with wrong outputs. \(\tilde{y}'\) is considered as the final output(distilled response) here. 
+                </p>
+                <p>
+                    \[
+                    \tilde{y}' = 
+                    \begin{cases} 
+                    \tilde{y} & \text{if } \text{Extract}(\tilde{y}) = y^{t}, \\
+                    y^{t} & \text{otherwise}.
+                    \end{cases}
+                    \]
+                    </p>
+                <p>
+                    Now this distilled response will be used for fine-tuning. So the loss will look like following equation.
+                </p>
+                <p>
+                    \[
+                    L_{\text{SDFT}}(\theta) = -\log f_{\theta}(\tilde{y}' \mid c_{t}, x_{t})
+                    \]
+                </p>
+                    
+                <h3 id="results">Paper Results</h3>
+                The following table shows that the proposed method enhances the fine-tuning quality compared to the vanilla method. 
+                <img src="figures/paper_1_result_table.png" alt="method" style="max-width: 100%; height: auto;">
+            </ol>
         </div>
     </div>
 </body>
