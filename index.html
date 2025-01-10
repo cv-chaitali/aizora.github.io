@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>aizora</title>
+    <title>AIzora</title>
     <link rel="stylesheet" href="./style.css">
     <script>
         function showSection(sectionId) {
@@ -22,17 +22,17 @@
 </head>
 <body>
     <header>
-        <h1>aizora</h1>
+        <h1>AIzora</h1>
         <p>Some papers and some concepts</p>
     </header>
     <nav>
-        <a href="#" onclick="showSection('home')">Home</a>
-        <a href="#" onclick="showSection('blog')">Blog</a>
-        <a href="#" onclick="showSection('paper-summary')">Paper Summaries</a>
+        <a href="#home" onclick="showSection('home')">Home</a>
+        <a href="#blog" onclick="showSection('blog')">Blog</a>
+        <a href="#paper-summary" onclick="showSection('paper-summary')">Paper Summaries</a>
     </nav>
 
     <div class="content">
-        <div id="home">
+        <div id="home" style="display: block;">
             <h2>Home</h2>
             <p>Hello, I share paper summaries and sometimes some concepts in a form of blog.</p>
             <p>About me</p>
@@ -43,14 +43,14 @@
             </ul>
         </div>
 
-        <div id="blog" class="blog-section">
+        <div id="blog" class="blog-section" style="display: none;">
             <h2>Blog</h2>
             <ul>
-                <li><a href="#" onclick="showSection('ml-guide')">Shapley Value</a></li>
+                <li><a href="#ml-guide" onclick="showSection('ml-guide')">Shapley Value</a></li>
             </ul>
         </div>
 
-        <div id="ml-guide" class="blog-post">
+        <div id="ml-guide" class="blog-post" style="display: none;">
             <h2>Shapley Value</h2>
             <p><strong>Note:</strong> If you think I should correct something, let me know 😊.</p>
             <p>This blog includes:</p>
@@ -244,19 +244,16 @@
             </p>
         </div>
 
-        <div id="paper-summary" class="paper-summary-section">
+        <div id="paper-summary" class="paper-summary-section" style="display: none;">
             <h2>Paper Summaries</h2>
             <ul>
-                <li><a href="#" onclick="showSection('paper-1')">Self-Distillation Bridges Distribution Gap in Language Model Fine-Tuning</a></li>
+                <li><a href="#paper-1" onclick="showSection('paper-1')">Self-Distillation Bridges Distribution Gap in Language Model Fine-Tuning</a></li>
             </ul>
         </div>
 
-        <div id="paper-1" class="blog-post">
+        <div id="paper-1" class="blog-post" style="display: none;">
             <h2>Self-Distillation Bridges Distribution Gap in Language Model Fine-Tuning</h2>
-            <p>Self-data-distillation method : Here, the model was used to create a distilled dataset to match its original distribution. </p>
-            <p><strong>How?</strong></p>
-            The following image summarises how it is done. 
-            <img src="/figures/paper_1_method.png" alt="Method from paper" width="800" height="200">
+            <p>Self-data-distillation method: The model was used to create a distilled dataset to match its original distribution.</p>
         </div>
     </div>
 </body>
