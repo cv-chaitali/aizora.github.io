@@ -21,53 +21,55 @@
     <a href="paper-summary.html">Paper Summaries</a>
   </nav>
   <main>
-    <h2>Shapley Value</h2>
-    <p><strong>Note:</strong> If you think I should correct something, let me know 😊.</p>
-    <p>This blog includes:</p>
-    <ol>
-      <li><a href="#what-is-shapley-value">What is Shapley Value</a></li>
-      <li><a href="#why-shapley-value">Why do we use Shapley Value</a></li>
-      <li><a href="#shapley-by-hand">Shapley Value by Hand</a></li>
-      <li><a href="#shapley-by-code">Shapley Value by Code</a></li>
-    </ol>
+    <!-- Wrap the main content in a centered container -->
+    <div class="content">
+      <h2>Shapley Value</h2>
+      <p><strong>Note:</strong> If you think I should correct something, let me know 😊.</p>
+      <p>This blog includes:</p>
+      <ol>
+        <li><a href="#what-is-shapley-value">What is Shapley Value</a></li>
+        <li><a href="#why-shapley-value">Why do we use Shapley Value</a></li>
+        <li><a href="#shapley-by-hand">Shapley Value by Hand</a></li>
+        <li><a href="#shapley-by-code">Shapley Value by Code</a></li>
+      </ol>
 
-    <h3 id="what-is-shapley-value">What is Shapley Value</h3>
-    <p>Shapley value is a solution concept in game theory that measures the contribution of each team player (or feature) in a game (or model prediction).</p>
+      <h3 id="what-is-shapley-value">What is Shapley Value</h3>
+      <p>Shapley value is a solution concept in game theory that measures the contribution of each team player (or feature) in a game (or model prediction).</p>
 
-    <h3 id="why-shapley-value">Where/Why Do We Use Shapley Value</h3>
-    <p>Shapley value is used in XAI (Explainable AI) to quantify the contribution of each feature to the outcome. Imagine a game played by 3 teams (A, B, and C) where team B wins. To fairly divide the prize money among players, the Shapley value helps determine each player's contribution. In machine learning, features are like players, and the prediction is the game outcome.</p>
+      <h3 id="why-shapley-value">Where/Why Do We Use Shapley Value</h3>
+      <p>Shapley value is used in XAI (Explainable AI) to quantify the contribution of each feature to the outcome. Imagine a game played by 3 teams (A, B, and C) where team B wins. To fairly divide the prize money among players, the Shapley value helps determine each player's contribution. In machine learning, features are like players, and the prediction is the game outcome.</p>
 
-    <h3 id="shapley-by-hand">Shapley Value by Hand</h3>
-    <p>Consider the formula:</p>
-    <p>
-      \[
-      \phi_i = \sum_{S \subseteq N \setminus \{i\}} \frac{|S|! (|N| - |S| - 1)!}{|N|!} \left[ v(S \cup \{i\}) - v(S) \right]
-      \]
-    </p>
-    <p>Here, <strong>N</strong> is the total number of features; <strong>S</strong> is a subset of features; <strong>v</strong> is a function (or model); and <strong>i</strong> is one feature. For example, assume <strong>v(S)</strong> has the following values:</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Subset (S)</th>
-          <th>v(S)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>{}</td><td>0</td></tr>
-        <tr><td>{A}</td><td>10</td></tr>
-        <tr><td>{B}</td><td>15</td></tr>
-        <tr><td>{C}</td><td>5</td></tr>
-        <tr><td>{A, B}</td><td>25</td></tr>
-        <tr><td>{A, C}</td><td>18</td></tr>
-        <tr><td>{B, C}</td><td>20</td></tr>
-        <tr><td>{A, B, C}</td><td>30</td></tr>
-      </tbody>
-    </table>
-    <p>To compute the Shapley value for feature A, for instance, you would substitute the values into the formula, sum the contributions, and divide by the number of permutations (3! = 6) to get \(\phi_A = 11\). Similarly, you would get <strong>13 for B</strong> and <strong>6 for C</strong>.</p>
+      <h3 id="shapley-by-hand">Shapley Value by Hand</h3>
+      <p>Consider the formula:</p>
+      <p>
+        \[
+        \phi_i = \sum_{S \subseteq N \setminus \{i\}} \frac{|S|! (|N| - |S| - 1)!}{|N|!} \left[ v(S \cup \{i\}) - v(S) \right]
+        \]
+      </p>
+      <p>Here, <strong>N</strong> is the total number of features; <strong>S</strong> is a subset of features; <strong>v</strong> is a function (or model); and <strong>i</strong> is one feature. For example, assume <strong>v(S)</strong> has the following values:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Subset (S)</th>
+            <th>v(S)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>{}</td><td>0</td></tr>
+          <tr><td>{A}</td><td>10</td></tr>
+          <tr><td>{B}</td><td>15</td></tr>
+          <tr><td>{C}</td><td>5</td></tr>
+          <tr><td>{A, B}</td><td>25</td></tr>
+          <tr><td>{A, C}</td><td>18</td></tr>
+          <tr><td>{B, C}</td><td>20</td></tr>
+          <tr><td>{A, B, C}</td><td>30</td></tr>
+        </tbody>
+      </table>
+      <p>To compute the Shapley value for feature A, for instance, you would substitute the values into the formula, sum the contributions, and divide by the number of permutations (3! = 6) to get \(\phi_A = 11\). Similarly, you would get <strong>13 for B</strong> and <strong>6 for C</strong>.</p>
 
-    <h3 id="shapley-by-code">Shapley Value by Code</h3>
-    <p>Below is an example of how to compute Shapley values in Python:</p>
-    <pre><code class="language-python">
+      <h3 id="shapley-by-code">Shapley Value by Code</h3>
+      <p>Below is an example of how to compute Shapley values in Python:</p>
+      <pre><code class="language-python">
 import matplotlib.pyplot as plt
 import cv2
 import numpy as np
@@ -92,9 +94,9 @@ def mask_image(image, mask, fill_value=0):
     for i in range(3):
         masked_image[0, i][mask == 0] = fill_value
     return masked_image
-    </code></pre>
-    <p>The code below shows how to compute the Shapley values given 4 image regions:</p>
-    <pre><code class="language-python">
+      </code></pre>
+      <p>The code below shows how to compute the Shapley values given 4 image regions:</p>
+      <pre><code class="language-python">
 def shapley_values(image, model, feature_parts):
     n = len(feature_parts)
     shap_values = np.zeros(n)
@@ -135,8 +137,9 @@ for mask, (x1, x2, y1, y2) in region_masks:
     feature_regions.append(torch.tensor(mask, dtype=torch.bool))
 shap_values = shapley_values(image_tensor, model, feature_regions)
 print("Shapley Values for each region:", shap_values)
-    </code></pre>
-    <p>Try loading your favorite model and play with the region size!</p>
+      </code></pre>
+      <p>Try loading your favorite model and play with the region size!</p>
+    </div>
   </main>
 </body>
 </html>
